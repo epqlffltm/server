@@ -3,6 +3,9 @@
 문자열 기반 입출력 함수 사용하기
 */
 
+#include<stdio.h>
+#include<stdlib.h>
+
 int main(void)
 {
   FILE *rfp = NULL, *wfp = NULL;
@@ -27,6 +30,6 @@ int main(void)
 
   fclose(rfp);
   fclose(wfp);
-  
+
   return 0;
 }
