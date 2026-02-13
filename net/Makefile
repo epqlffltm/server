@@ -3,7 +3,7 @@
 CC = gcc
 CFLAGS = -Wall -g
 
-SRCG = %$(wildcard *.c)
+SRCG = $(wildcard *.c)
 
 TARGET = $(SRCG:.c=)
 

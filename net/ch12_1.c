@@ -8,11 +8,11 @@
 
 int main(void)
 {
-  struct hostnet *hent;
+  struct hostent *hent;
 
   sethostent(0);
 
-  while((*hent = gethostent()) != NULL)
+  while((hent = gethostent()) != NULL)
   {
     printf("hostname: %s\n", hent->h_name);
   }
