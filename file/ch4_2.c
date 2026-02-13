@@ -12,7 +12,7 @@ O_EXCL 플래그 사용하기
 
 int main(void)
 {
-  int fd = 0;
+  int fd = -1;
 
   fd = open("test2.txt", O_CREAT | O_EXCL, 0644);
 

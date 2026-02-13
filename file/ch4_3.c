@@ -1,6 +1,6 @@
 /*
 2026-02-13
-새파일 생성학습
+파일 기술자 할당
 */
 
 #include<stdio.h>
@@ -13,21 +13,18 @@
 int main(void)
 {
   int fd = -1;
-  mode_t mode;
 
-  mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;//파일 권한 0644
+  close(0);
 
-  fd = open("text.txt", O_CREAT, mode);//파일 생성
-
-  if (fd == -1)
+  fd = open("text.txt", O_RDWR);
+  if(fd == -1)
   {
     perror("open error");
     exit(1);
   }
-
   printf("text.txt fd: %d\n", fd);
 
-  close(fd);
+  clode(fd);
 
   return 0;
 }
