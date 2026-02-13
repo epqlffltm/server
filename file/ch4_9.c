@@ -36,7 +36,7 @@ int main(void)
     exit(1);
   }
 
-  if(write(fd, "Hello Linux\n", 15) != 15)
+  if(write(fd, "Hello Linux\n", 12) != 12)
   {
     perror("write error");
     exit(1);
