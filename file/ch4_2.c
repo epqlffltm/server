@@ -16,7 +16,7 @@ int main(void)
 
   fd = open("test2.txt", O_CREAT | O_EXCL, 0644);
 
-  if(fd == -1
+  if(fd == -1)
   {
     perror("open error");
     exit(1);
