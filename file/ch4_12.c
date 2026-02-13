@@ -17,7 +17,7 @@ int main(void)
     exit(1);
   }
 
-  if(wfp = fopen("linux.out", "w")) == NULL)
+  if((wfp = fopen("linux.out", "w")) == NULL)
   {
     perror("fopen: linux.out error");
     exit(1);
