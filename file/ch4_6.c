@@ -16,27 +16,27 @@ int main(void)
   char buf[256];
 
   int flags = O_CREAT | O_WRONLY | O_TRUNC;
-  mode_t mode = S_IRUSR | S_IWUSRF | S_IRGRP | S_IROTH;
+  mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 
-  fd = open("tmp.aaa", flags, mode);
+  fd = open("linux.txt", flags, mode);
   if(fd == -1)
   {
     perror("open error");
     exit(1);
   }
-  close(1);
 
-  fd1 = dup(df);
-  if(fd1 == -1)
-  {
-    perror("dup error");
-    exit(1);
-  }
+  start = lseek(fd, 0, SEEK_CUR);
+  n = read(fd, buf, (sizeof(buf)-1));
+  buf[n] = '\0';
+  printf("start: %ld, read string: %s, n: %d\n", start, buf, n);
 
-  printf("DUP FD = %d\n",fd1);
-  printf("Hello World!!\n");
+  cur = lseek(fd, 0, SEEK_CUR);
+  printf("current offset: %ld\n", cur);
 
-  close(fd);
+  start = lseek(fd, 0, SEEK_SET);
+  n = read(fd, buf, (sizeof(buf)-1));
+  buf[n] = '\0';
+  printf("start: %ld, read string: %s, n: %d\n", start, buf, n);
 
   return 0;
 }
