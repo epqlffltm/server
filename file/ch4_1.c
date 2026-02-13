@@ -13,9 +13,7 @@
 int main(void)
 {
   int fd = -1;
-  mode_t mode;
-
-  mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;//파일 권한 0644
+  mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;//파일 권한 0644
 
   fd = open("text.txt", O_CREAT, mode);//파일 생성
 
