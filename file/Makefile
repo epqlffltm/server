@@ -4,7 +4,7 @@ CFLAGS = -Wall -g
 
 SRCG = $(wildcard *.c)
 
-TARGER = $(SRCG: .c=)
+TARGET = $(SRCG:.c=)
 
 all: $(TARGET)
 
