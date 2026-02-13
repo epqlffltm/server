@@ -12,7 +12,7 @@ int main(void)
 {
   int fd = -1;
 
-  int flags = O_CREAT | OP_WRONLY | O_TRUNC;
+  int flags = O_CREAT | O_WRONLY | O_TRUNC;
   mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 
   fd = open("tmp.bbb", flags, mode);
