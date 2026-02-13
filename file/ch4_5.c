@@ -16,7 +16,7 @@ int main(void)
   char buf[10];
 
   int flags = O_CREAT | O_RDONLY | O_WRONLY | O_TRUNC;
-  mode_t mode = S_IRUSR | S_IKWUSR | S_IRGRP | S_IROTH;
+  mode_t mode = S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH;
 
   rfd = open("linux.txt", O_RDONLY);
   if(rfd == -1)
@@ -25,7 +25,7 @@ int main(void)
     exit(1);
   }
 
-  wfd = open("output.txt", flage, mode);
+  wfd = open("output.txt", flags, mode);
   if(wfd == -1)
   {
     perror("open write file error");
