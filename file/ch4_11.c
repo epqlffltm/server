@@ -5,7 +5,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-int maibn(void)
+int main(void)
 {
   FILE *rfp = NULL, *wfp = NULL;
   int n = -1;
