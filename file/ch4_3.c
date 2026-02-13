@@ -24,7 +24,7 @@ int main(void)
   }
   printf("text.txt fd: %d\n", fd);
 
-  clode(fd);
+  close(fd);
 
   return 0;
 }
