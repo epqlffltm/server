@@ -22,6 +22,8 @@ int main(void)
     exit(1);
   }
 
+  printf("test2.txt fd: %d\n", fd);
+
   close(fd);
 
   return 0;
