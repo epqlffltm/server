@@ -50,8 +50,8 @@ int main(void)
     exit(1);
   }
 
-  sprintf(buf.data(), "your ip address is %s", inet_ntoa(cli.sin_addr));
-  if (send(ns, buf.data(), strlen(buf.data()), 0) == -1)
+  std::string msg = "your ip address is " + std::string(inet_ntoa(cli.sin_addr));
+  if (send(ns, msg.c_str(), msg.length(), 0) == -1)
   {
     std::cerr << "send error" << std::endl;
     exit(1);
