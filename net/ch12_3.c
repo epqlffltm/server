@@ -8,7 +8,7 @@ NBO(네트워크 바이트 순서) -> BHO(호스트 바이트 순서)로 변환
 int main(void)
 {
   struct servent *port;
-  serservent(0);
+  setservent(0);
 
   for(int i = 0; i < 5; i++)
   {
