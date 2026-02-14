@@ -29,7 +29,7 @@ int main(void)
 
   memset((char *)&ser, 0, sizeof(ser));
   ser.sin_family = AF_INET;
-  ser.sin_addr.s_addr = inet_addr("192.168.147.129");
+  ser.sin_addr.s_addr = inet_addr(INADDR_ANY);
   ser.sin_port = htons(atoi(portnumber.c_str()));
 
   if (bind(sd, (struct sockaddr *)&ser, sizeof(ser)) == -1)
