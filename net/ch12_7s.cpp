@@ -3,63 +3,82 @@
 인터넷 소켓 서버
 */
 
-#include<iostream>
-#include<cstdlib>
-#include<string>
+#include <iostream>
+#include <cstdlib>
 #include <cstring>
-#include<vector>
-#include<unistd.h>
-#include<sys/un.h>
-#include<sys/socket.h>
-#include<arpa/inet.h>
+#include <string>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
 
 int main(void)
 {
-  const std::string portnumber = "9000";
-  std::vector<char>buf(256);
-  struct sockaddr_in ser, cli;
-  int sd = -1, ns = -1; 
-  socklen_t clientlen = sizeof(cli);
-  
-  if((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
-  {
-    std::cerr << "socket error" << std::endl;
-    exit(1);
-  }
+    const int PORT = 9000;
+    struct sockaddr_in ser, cli;
+    int sd = -1, ns = -1; 
+    socklen_t clientlen = sizeof(cli);
+    
+    // 소켓 생성
+    if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+    {
+        std::cerr << "socket error" << std::endl;
+        exit(1);
+    }
 
-  memset((char *)&ser, 0, sizeof(ser));
-  ser.sin_family = AF_INET;
-  ser.sin_addr.s_addr = inet_addr(INADDR_ANY);
-  ser.sin_port = htons(atoi(portnumber.c_str()));
+    // SO_REUSEADDR 옵션
+    int opt = 1;
+    if (setsockopt(sd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) == -1)
+    {
+        std::cerr << "setsockopt error" << std::endl;
+        close(sd);
+        exit(1);
+    }
 
-  if (bind(sd, (struct sockaddr *)&ser, sizeof(ser)) == -1)
-  {
-    std::cerr << "bind error" << std::endl;
-    exit(1);
-  }
+    // 서버 주소 설정
+    memset(&ser, 0, sizeof(ser));
+    ser.sin_family = AF_INET;
+    ser.sin_addr.s_addr = htonl(INADDR_ANY);
+    ser.sin_port = htons(PORT);
 
-  if(listen(sd, 5) == -1)
-  {
-    std::cerr << "listen error" << std::endl;
-    exit(1);
-  }
+    // bind
+    if (bind(sd, (struct sockaddr *)&ser, sizeof(ser)) == -1)
+    {
+        std::cerr << "bind error" << std::endl;
+        close(sd);
+        exit(1);
+    }
 
-  if((ns = accept(sd, (struct sockaddr *)&cli, &clientlen)) == -1)
-  {
-    std::cerr << "accept error" << std::endl;
-    exit(1);
-  }
+    // listen
+    if (listen(sd, 5) == -1)
+    {
+        std::cerr << "listen error" << std::endl;
+        close(sd);
+        exit(1);
+    }
 
-  std::string msg = "your ip address is " + std::string(inet_ntoa(cli.sin_addr));
-  if (send(ns, msg.c_str(), msg.length(), 0) == -1)
-  {
-    std::cerr << "send error" << std::endl;
-    exit(1);
-  }
+    std::cout << "Server listening on port " << PORT << "..." << std::endl;
 
-  //unlink(socket_name.c_str());
-  close(ns);
-  close(sd);
+    // accept
+    if ((ns = accept(sd, (struct sockaddr *)&cli, &clientlen)) == -1)
+    {
+        std::cerr << "accept error" << std::endl;
+        close(sd);
+        exit(1);
+    }
 
-  return 0;
+    std::cout << "Client connected from " << inet_ntoa(cli.sin_addr) << std::endl;
+
+    // 메시지 생성 (C++ 방식)
+    std::string msg = "Your IP address is " + std::string(inet_ntoa(cli.sin_addr));
+    
+    // 전송
+    if (send(ns, msg.c_str(), msg.length(), 0) == -1)
+    {
+        std::cerr << "send error" << std::endl;
+    }
+
+    close(ns);
+    close(sd);
+
+    return 0;
 }

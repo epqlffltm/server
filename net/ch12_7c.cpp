@@ -3,48 +3,61 @@
 인터넷 소켓 클라이언트
 */
 
-#include<iostream>
-#include<cstdlib>
-#include<string>
-#include<cstring>
-#include<vector>
-#include<unistd.h>
-#include<sys/un.h>
-#include<sys/socket.h>
-#include<arpa/inet.h>
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+#include <vector>
+#include <unistd.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
 
 int main(void)
 {
-  const std::string portnumber = "9000";
-  std::vector<char>buf(256);
-  int sd;
-  struct sockaddr_in sin;
+    const int PORT = 9000;
+    const char* SERVER_IP = "127.0.0.1";
+    std::vector<char> buf(256);
+    int sd;
+    struct sockaddr_in sin;
 
-  if((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
-  {
-    std::cerr << "socket error" << std::endl;
-    exit(1);
-  }
+    // 소켓 생성
+    if ((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+    {
+        std::cerr << "socket error" << std::endl;
+        exit(1);
+    }
 
-  memset((char *)&sin, 0, sizeof(sin));
-  sin.sin_family = AF_INET;
-  sin.sin_addr.s_addr = inet_addr("192.168.147.129");
-  sin.sin_port = htons(atoi(portnumber.c_str()));
+    // 서버 주소 설정
+    memset(&sin, 0, sizeof(sin));
+    sin.sin_family = AF_INET;
+    sin.sin_addr.s_addr = inet_addr(SERVER_IP);
+    sin.sin_port = htons(PORT);
+    
+    // 서버 연결
+    if (connect(sd, (struct sockaddr *)&sin, sizeof(sin)) < 0)
+    {
+        std::cerr << "connect error" << std::endl;
+        close(sd);
+        exit(1);
+    }
 
-  if(connect(sd, (struct sockaddr *)&sin, sizeof(sin)) < 0)
-  {
-    std::cerr << "connect error" << std::endl;
-    exit(1);
-  }
+    std::cout << "Connected to server" << std::endl;
 
-  if(recv(sd, buf.data(), buf.size() - 1, 0) == -1)
-  {
-    std::cerr << "recv error" << std::endl;
-    exit(1);
-  }
+    // 메시지 수신
+    memset(buf.data(), 0, buf.size());
+    int n = recv(sd, buf.data(), buf.size() - 1, 0);
+    if (n == -1)
+    {
+        std::cerr << "recv error" << std::endl;
+        close(sd);
+        exit(1);
+    } else if (n == 0) {
+        std::cout << "Server closed connection" << std::endl;
+    } else {
+        buf[n] = '\0';
+        std::cout << "Received: " << buf.data() << std::endl;
+    }
 
-  close(sd);
-  std::cout << "received message: " << buf.data() << std::endl;
+    close(sd);
 
-  return 0;
+    return 0;
 }
