@@ -1,14 +1,14 @@
 #makefile
 
-CC = gcc
+CC = g++
 CFLAGS = -Wall -g
 
-SRCG = $(wildcard *.c)
+SRCG = $(wildcard *.cpp)
 
-TARGET = $(SRCG:.c=)
+TARGET = $(SRCG:.cpp=)
 
 all: $(TARGET)
-%: %.c
+%: %.cpp
 	$(CC) $(CFLAGS) -o $@ $<
 
 clean:
