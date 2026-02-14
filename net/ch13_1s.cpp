@@ -14,17 +14,18 @@
 
 int main(void)
 {
-  const std::string port_number = "9001";
+  const int port_number = 9001;
   char buf[256];
   struct sockaddr_in sin, cli;
-  int sd  = -1, ns = -1, clientlen = sizeof(cli);
+  int sd  = -1, ns = -1;
+  unsigned int clientlen = sizeof(cli); 
 
   memset((char *)&sin, '\0', sizeof(sin));
   sin.sin_family = AF_INET;
   sin.sin_port = htons(port_number);
-  sin.sin_addr.s_addr = inet_addr(INADDR_ANY);
+  sin.sin_addr.s_addr = htonl(INADDR_ANY);
   
-  if((sd = socker(AF_INET, SOCK_STREAM, 0)) == -1)
+  if((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
   {
     std::cerr << "socket error" << std::endl;
     exit(1);
@@ -59,7 +60,7 @@ int main(void)
       exit(1);
     }
 
-    if(recv(ns,buf,sizeof(buf),0) == =1)
+    if(recv(ns,buf,sizeof(buf),0) == -1)
     {
       std::cerr << "recv error" << std::endl;
       exit(1);
