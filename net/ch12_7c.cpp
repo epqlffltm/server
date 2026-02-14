@@ -1,6 +1,6 @@
 /*
 2026-02-14
-인터넷 소켓 서버
+인터넷 소켓 클라이언트
 */
 
 #include<iostream>
@@ -28,8 +28,8 @@ int main(void)
 
   memset((char *)&sin, 0, sizeof(sin));
   sin.sin_family = AF_INET;
-  sin.sin_addr.s_addr = htonl(portnumber.c_str());
-  sin.sin_port = inet_addr("192.168.147.129");
+  sin.sin_addr.s_addr = inet_addr("192.168.147.129");
+  sin.sin_port = htons(atoi(portnumber.c_str()));
 
   if(connect(sd, (struct sockaddr *)&sin, sizeof(sin)) < 0)
   {
@@ -37,7 +37,7 @@ int main(void)
     exit(1);
   }
 
-  if(recv(sd, buf.data(), sizeof(buf), 0) == -1)
+  if(recv(sd, buf.data(), buf.size() - 1, 0) == -1)
   {
     std::cerr << "recv error" << std::endl;
     exit(1);

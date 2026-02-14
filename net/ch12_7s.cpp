@@ -18,9 +18,10 @@ int main(void)
   const std::string portnumber = "9000";
   std::vector<char>buf(256);
   struct sockaddr_in ser, cli;
-  int sd = -1, ns = -1, clientlen = sizeof(cli);
+  int sd = -1, ns = -1; 
+  socklen_t clientlen = sizeof(cli);
   
-  if((sd = socket(AF_INET, SOCK_SOCK_STREAM, 0)) == -1)
+  if((sd = socket(AF_INET, SOCK_STREAM, 0)) == -1)
   {
     std::cerr << "socket error" << std::endl;
     exit(1);
@@ -28,16 +29,16 @@ int main(void)
 
   memset((char *)&ser, 0, sizeof(ser));
   ser.sin_family = AF_INET;
-  ser.sin_addr.s_addr = htonl(INADDR_ANY);
-  sin.sin_addr.s_port = inet_addr("192.168.147.129");
+  ser.sin_addr.s_addr = inet_addr("192.168.147.129");
+  ser.sin_port = htons(atoi(portnumber.c_str()));
 
-  if (bind(sd, (struct sockaddr *)&sin, sizeof(sin)) == -1)
+  if (bind(sd, (struct sockaddr *)&ser, sizeof(ser)) == -1)
   {
     std::cerr << "bind error" << std::endl;
     exit(1);
   }
 
-  if(listen(sd, 5))
+  if(listen(sd, 5) == -1)
   {
     std::cerr << "listen error" << std::endl;
     exit(1);
@@ -55,8 +56,8 @@ int main(void)
     std::cerr << "send error" << std::endl;
     exit(1);
   }
-  
-  unlink(socket_name.c_str());
+
+  //unlink(socket_name.c_str());
   close(ns);
   close(sd);
 
