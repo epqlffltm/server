@@ -6,7 +6,8 @@
 #include<iostream>
 #include<cstdlib>
 #include<string>
-#include <cstring>
+#include<cstring>
+#include<vector>
 #include<unistd.h>
 #include<sys/un.h>
 #include<sys/socket.h>
