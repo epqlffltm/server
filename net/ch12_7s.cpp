@@ -1,0 +1,64 @@
+/*
+2026-02-14
+인터넷 소켓 서버
+*/
+
+#include<iostream>
+#include<cstdlib>
+#include<string>
+#include <cstring>
+#include<vector>
+#include<unistd.h>
+#include<sys/un.h>
+#include<sys/socket.h>
+#include<arpa/inet.h>
+
+int main(void)
+{
+  const std::string portnumber = "9000";
+  std::vector<char>buf(256);
+  struct sockaddr_in ser, cli;
+  int sd = -1, ns = -1, clientlen = sizeof(cli);
+  
+  if((sd = socket(AF_INET, SOCK_SOCK_STREAM, 0)) == -1)
+  {
+    std::cerr << "socket error" << std::endl;
+    exit(1);
+  }
+
+  memset((char *)&ser, 0, sizeof(ser));
+  ser.sin_family = AF_INET;
+  ser.sin_addr.s_addr = htonl(INADDR_ANY);
+  sin.sin_addr.s_port = inet_addr("192.168.147.129");
+
+  if (bind(sd, (struct sockaddr *)&sin, sizeof(sin)) == -1)
+  {
+    std::cerr << "bind error" << std::endl;
+    exit(1);
+  }
+
+  if(listen(sd, 5))
+  {
+    std::cerr << "listen error" << std::endl;
+    exit(1);
+  }
+
+  if((ns = accept(sd, (struct sockaddr *)&cli, &clientlen)) == -1)
+  {
+    std::cerr << "accept error" << std::endl;
+    exit(1);
+  }
+
+  sprintf(buf.data(), "your ip address is %s", inet_ntoa(cli.sin_addr));
+  if (send(ns, buf.data(), strlen(buf.data()), 0) == -1)
+  {
+    std::cerr << "send error" << std::endl;
+    exit(1);
+  }
+  
+  unlink(socket_name.c_str());
+  close(ns);
+  close(sd);
+
+  return 0;
+}
