@@ -28,7 +28,7 @@ int main(void)
 
   memset((char *)&sin, 0, sizeof(sin));
   sin.sin_family = AF_INET;
-  sin.sin_addr.s_addr = htonl(portnumber);
+  sin.sin_addr.s_addr = htonl(portnumber.c_str());
   sin.sin_port = inet_addr("192.168.147.129");
 
   if(connect(sd, (struct sockaddr *)&sin, sizeof(sin)) < 0)
